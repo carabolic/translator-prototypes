@@ -1,8 +1,10 @@
 package de.tu_berlin.textmining.translator.prototypes;
 
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class Dictionary {
 	public void parseDictFile(String path) {
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(path));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp1252"));
 			String aLine;
 			String[] aTempLine;
 			String pattern1 = "\\([^\\)]*\\)"; // replace (..) with empty string
