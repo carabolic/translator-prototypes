@@ -31,7 +31,7 @@ public class Dictionary {
 	public void parseDictFile(String path) {
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp1252"));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
 			String aLine;
 			String[] aTempLine;
 			String pattern1 = "\\([^\\)]*\\)"; // replace (..) with empty string
