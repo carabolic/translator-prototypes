@@ -3,6 +3,8 @@ package de.tu_berlin.textmining.translator.prototypes;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -53,7 +55,7 @@ public class Dictionary {
 					ger = ger.replaceAll(pattern2, ""); // remove all [..]
 					ger = ger.replaceAll(pattern3, ""); // remove all {..}
 					ger = ger.trim(); // remove leading and tailing whitespaces
-					ger.toLowerCase();
+					ger = ger.toLowerCase();
 					eng = aTempLine[1].replaceAll(pattern1, ""); // remove all (..)
 					eng = eng.replaceAll(pattern2, ""); // remove all [..]
 					eng = eng.replaceAll(pattern3, ""); // remove all {..}
@@ -199,17 +201,44 @@ public class Dictionary {
 		StringBuilder strBld = new StringBuilder();
 		while (strTok.hasMoreTokens()) {
 			String word = strTok.nextToken().toLowerCase();
-			strBld.append(this.translateWord(word));
+			String[] transWords = this.translateWord(word);
+			if (transWords != null) {
+				strBld.append(Dictionary.wordArrayToString(transWords));
+			}
+			else {
+				strBld.append('[');
+				strBld.append(word);
+				strBld.append(']');
+			}
 			strBld.append(" ");
 		}
 		
 		return strBld.toString();
 	}
 	
-	public String translateWord(String word) {
+	public String[] translateWord(String word) {
 		if (this.translationData.containsKey(word)) {
-			return this.translationData.get(word).get(0);
+			return this.translationData.get(word).toArray(new String[0]);
 		}
-		return "[EMPTY}";
+		return null;
+	}
+	
+	private static String wordArrayToString(String[] words) {
+		StringBuilder strBld = new StringBuilder();
+		if (words.length < 2) {
+			strBld.append(words[0]);
+		}
+		else {
+			strBld.append('(');
+			for (int i = 0; i < words.length; i++) {
+				strBld.append(words[i]);
+				if (i < words.length - 1) {
+					strBld.append('/');
+				}
+			}
+			strBld.append(')');
+		}
+		
+		return strBld.toString();
 	}
 }
