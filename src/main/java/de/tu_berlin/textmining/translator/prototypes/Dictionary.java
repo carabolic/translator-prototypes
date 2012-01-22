@@ -3,8 +3,6 @@ package de.tu_berlin.textmining.translator.prototypes;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -221,6 +219,10 @@ public class Dictionary {
 			return this.translationData.get(word).toArray(new String[0]);
 		}
 		return null;
+	}
+	
+	public void translateWord(String[] sentence, int index)	 {
+		
 	}
 	
 	private static String wordArrayToString(String[] words) {

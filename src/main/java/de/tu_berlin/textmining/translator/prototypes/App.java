@@ -7,6 +7,7 @@ package de.tu_berlin.textmining.translator.prototypes;
 public class App {
 
 	private static final String[] GERMAN_SENTENCES = {
+			"Über den Wolken, schwingen die Vögel ihre Flügel.",
 			"Zehn zahme Ziegen zogen zehn Zentner Zucker im Zwickauer Zoo",
 			"Franz jagt im komplett verwahrlosten Taxi quer durch Bayern.",
 			"Hamburg - Der Druck auf die Bundesregierung wächst, den künftigen europäischen Rettungsschirm ESM aufzustocken.",
@@ -35,13 +36,11 @@ public class App {
 		// test parse dict.txt file into hashmap and create json file
 		System.out.print("Reading dictionary file... ");
 		dict.parseDictFile(pathToDict);
-		//dict.parseJSONFile(pathToJSON);
+		// dict.parseJSONFile(pathToJSON);
 		System.out.print("DONE\n");
-		dict.createJSONFile(pathToJSON);
+		//dict.createJSONFile(pathToJSON);
 		// test parse json file into hashmap
 		// dict.parseJSONFile("/home/textmining/Desktop/dict.json");
-
-		String germanString = "Zehn zahme Ziegen zogen zehn Zentner Zucker";
 
 		for (String sentence : GERMAN_SENTENCES) {
 			String englishString = dict.translateSentence(sentence);
