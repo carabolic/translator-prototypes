@@ -1,5 +1,8 @@
 package de.tu_berlin.textmining.translator.prototypes;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Hello world!
  * 
@@ -32,19 +35,25 @@ public class App {
 		String pathToDict = args[0];
 		String pathToJSON = args[1];
 		/** Load the Dictionary */
-		Dictionary dict = new Dictionary();
+		Dictionary dict = new HashDictionary();
 		// test parse dict.txt file into hashmap and create json file
 		System.out.print("Reading dictionary file... ");
-		dict.parseDictFile(pathToDict);
-		// dict.parseJSONFile(pathToJSON);
+		//dict.parseDictFile(pathToDict);
+		try {
+			dict.load(pathToDict);
+		} catch (FileNotFoundException e) {
+			System.err.println("Dictionary not found at given path: " + pathToDict);
+			System.exit(1);
+		} catch (IOException e) {
+			System.err.println("Error while opening file " + pathToDict);
+			e.printStackTrace();
+			System.exit(1);
+		}
 		System.out.print("DONE\n");
-		//dict.createJSONFile(pathToJSON);
-		// test parse json file into hashmap
-		// dict.parseJSONFile("/home/textmining/Desktop/dict.json");
 
 		for (String sentence : GERMAN_SENTENCES) {
 			String englishString = dict.translateSentence(sentence);
-			System.out.println("GERMAN: \t" + sentence);
+			System.out.println("GERMAN:\t" + sentence);
 			System.out.println("ENGLISH:\t" + englishString);
 			System.out.println();
 		}
