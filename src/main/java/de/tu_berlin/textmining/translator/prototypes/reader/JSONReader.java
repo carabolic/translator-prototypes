@@ -5,9 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import de.tu_berlin.textmining.translator.prototypes.DictPair;
+import de.tu_berlin.textmining.translator.prototypes.data.DictionaryEntry;
 
-public class JSONReader implements InputReader {
+public class JSONReader implements DictionaryFileReader {
 	
 	private final String path;
 	private final BufferedReader bufReader;
@@ -21,7 +21,7 @@ public class JSONReader implements InputReader {
 		return this.path;
 	}
 
-	public DictPair readWord() throws IOException {
+	public DictionaryEntry readEntry() throws IOException {
 		String line;
 		if ((line = bufReader.readLine()) != null) {
 			

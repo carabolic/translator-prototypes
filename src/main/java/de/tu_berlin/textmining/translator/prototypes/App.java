@@ -3,6 +3,10 @@ package de.tu_berlin.textmining.translator.prototypes;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import de.tu_berlin.textmining.translator.prototypes.data.Dictionary;
+import de.tu_berlin.textmining.translator.prototypes.data.HashDictionary;
+import de.tu_berlin.textmining.translator.prototypes.reader.ElcombriReader;
+
 /**
  * Hello world!
  * 
@@ -33,14 +37,15 @@ public class App {
 		}
 
 		String pathToDict = args[0];
-		String pathToJSON = args[1];
+		//String pathToJSON = args[1];
 		/** Load the Dictionary */
 		Dictionary dict = new HashDictionary();
 		// test parse dict.txt file into hashmap and create json file
 		System.out.print("Reading dictionary file... ");
 		//dict.parseDictFile(pathToDict);
 		try {
-			dict.load(pathToDict);
+			// dict.load(new TabSeparatedReader(pathToDict));
+			dict.load(new ElcombriReader(pathToDict));
 		} catch (FileNotFoundException e) {
 			System.err.println("Dictionary not found at given path: " + pathToDict);
 			System.exit(1);

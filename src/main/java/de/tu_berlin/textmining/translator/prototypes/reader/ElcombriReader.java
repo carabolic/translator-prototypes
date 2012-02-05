@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.HashSet;
+import de.tu_berlin.textmining.translator.prototypes.data.DictionaryEntry;
+import de.tu_berlin.textmining.translator.prototypes.data.DictionaryEntryBuilder;
 
-import de.tu_berlin.textmining.translator.prototypes.DictPair;
-
-public class ElcombriReader implements InputReader {
+public class ElcombriReader implements DictionaryFileReader {
 
 	private final String path;
 	private final BufferedReader bufReader;
@@ -31,8 +30,8 @@ public class ElcombriReader implements InputReader {
 		return this.path;
 	}
 
-	public DictPair readWord() throws IOException {
-		DictPair result = null;
+	public DictionaryEntry readEntry() throws IOException {
+		DictionaryEntry result = null;
 		String line;
 		
 		Parsing:
@@ -72,7 +71,7 @@ public class ElcombriReader implements InputReader {
 						attList = att.substring(1).split("\\{");
 					}
 					
-					result = new DictPair(ger, eng, new HashSet<String>(Arrays.asList(attList)));
+					result = new DictionaryEntryBuilder(ger, eng).addAttributes(Arrays.asList(attList)).build();
 				}
 			}
 		}
