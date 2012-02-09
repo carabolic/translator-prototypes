@@ -45,5 +45,8 @@ public interface  LanguageModel {
       * @return
      */
     Iterable<String> generateSentence();
+    
+    double getBiGramProbability(String word1, String word2);
+    double getUniGramProbability(String word);
 
 }

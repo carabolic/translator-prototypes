@@ -1,7 +1,10 @@
 package de.tu_berlin.textmining.translator.prototypes.data.lexicon;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -126,23 +129,22 @@ public class HashDictionary implements Dictionary {
 		throw new UnsupportedOperationException();
 	}
 
-	public String translateSentence(String sentence) {
+	public List<List<String>> translateSentence(String sentence) {
 		StringTokenizer strTok = new StringTokenizer(sentence);
-		StringBuilder strBld = new StringBuilder();
+		List<List<String>> translation = new ArrayList<List<String>>();
 		while (strTok.hasMoreTokens()) {
-			String word = strTok.nextToken().toLowerCase();
+			String word = strTok.nextToken().replaceAll("[^a-zA-Z0-9äöüßÄÖÜ\\-]", "").trim().toLowerCase();
 			String[] transWords = this.translateWord(word);
 			if (transWords != null) {
-				strBld.append(HashDictionary.wordArrayToString(transWords));
+				translation.add(Arrays.asList(transWords));
 			} else {
-				strBld.append('[');
-				strBld.append(word);
-				strBld.append(']');
+				List<String> wordList = new ArrayList<String>(1);
+				wordList.add(word);
+				translation.add(wordList);
 			}
-			strBld.append(" ");
 		}
 
-		return strBld.toString();
+		return translation;
 	}
 
 	public String[] translateWord(String word) {

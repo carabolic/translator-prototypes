@@ -1,6 +1,7 @@
 package de.tu_berlin.textmining.translator.prototypes.data.lexicon;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import de.tu_berlin.textmining.translator.prototypes.reader.DictionaryFileReader;
@@ -48,7 +49,7 @@ public interface Dictionary {
 	 * @param sentence
 	 * @return
 	 */
-	String translateSentence(String sentence);
+	List<List<String>> translateSentence(String sentence);
 	
 	/**
 	 * 

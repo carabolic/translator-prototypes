@@ -1,47 +1,21 @@
 package de.tu_berlin.textmining.translator.prototypes;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
-
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
 
 import de.tu_berlin.textmining.translator.prototypes.data.lexicon.Dictionary;
 import de.tu_berlin.textmining.translator.prototypes.data.lexicon.HashDictionary;
 import de.tu_berlin.textmining.translator.prototypes.models.BiGramModel;
 import de.tu_berlin.textmining.translator.prototypes.models.LanguageModel;
+import de.tu_berlin.textmining.translator.prototypes.reader.DictionaryFileReader;
 import de.tu_berlin.textmining.translator.prototypes.reader.ElcombriReader;
 
-/**
- * Hello world!
- * 
- */
-public class App {
+public class Translator {
 
-	static String trainingSentencesFile = "prototypes/corpus.txt";
-	
-	static Collection<List<String>> getSentences(String corpus){
-	    Collection<List<String>> sentences = new ArrayList<List<String>>();
-	    for (String rawSentence : corpus.split("\n")) {
-	        List<String> sentence = Lists.newArrayList();
-	        for (String word : rawSentence.split("\\s+")) {
-	            sentence.add(word.toLowerCase());
-	        }
-	        sentences.add(sentence);
-	    }
-	    return sentences;
-	}
-	
-	static void train(LanguageModel languageModel) throws IOException {
-	    String trainingCorpus = Resources.toString(Resources.getResource(trainingSentencesFile), Charsets.UTF_8);
-	    languageModel.train(getSentences(trainingCorpus));
-	}
-	
 	private static final String[] GERMAN_SENTENCES = {
 			"Über den Wolken, schwingen die Vögel ihre Flügel.",
 			"Zehn zahme Ziegen zogen zehn Zentner Zucker im Zwickauer Zoo",
@@ -59,48 +33,100 @@ public class App {
 			"Die Bundesregierung verweist bisher dagegen eisern darauf, dass erst im März geprüft werde, ob der ESM mit ausreichendem Kapital ausgestattet ist.",
 			"So war es beim letzten EU-Gipfel vereinbart worden." };
 
-	public static void main(String[] args) {
+	private final Dictionary dict;
+	private final LanguageModel langModel;
+
+	public Translator(Dictionary dict, LanguageModel languageModel) {
+		this.dict = dict;
+		this.langModel = languageModel;
+	}
+
+	public String translateSentence(String sentence) {
+		StringBuilder strBld = new StringBuilder();
+		List<List<String>> translation = this.dict.translateSentence(sentence);
+		String lastWord = "<start>";
+		String candidate = "";
+
+		for (List<String> possibilities : translation) {
+			double maxProb = 0.0;
+			boolean allEqual = true;
+			candidate = "";
+			for (String currentWord : possibilities) {
+				double prob = this.langModel.getBiGramProbability(lastWord, currentWord);
+				if (prob > maxProb) {
+					maxProb = prob;
+					if (!candidate.equals("")) {
+						allEqual = false;
+					}
+					candidate = currentWord;
+				}
+			}
+			
+			if (allEqual) {
+				for (String currentWord : possibilities) {
+					maxProb = 0.0;
+					double prob = this.langModel.getUniGramProbability(currentWord);
+					if (prob > maxProb) {
+						maxProb = prob;
+						candidate = currentWord;
+					}
+				}
+			}
+
+			lastWord = candidate;
+			strBld.append(candidate);
+			strBld.append(" ");
+		}
+
+		return strBld.toString().trim() + "";
+	}
+
+	public static void main(String... args) throws UnsupportedEncodingException {
 		if (args.length < 2) {
-			System.out.println("Usage: App [path to dict] [path to JSON output]");
+			System.out.println("Usage:\nTranslator [path to dict] [path to corpus]");
 			return;
 		}
-
 		String pathToDict = args[0];
-		//String pathToJSON = args[1];
-		/** Load the Dictionary */
-		Dictionary dict = new HashDictionary();
-		// test parse dict.txt file into hashmap and create json file
-		System.out.print("Reading dictionary file... ");
-		//dict.parseDictFile(pathToDict);
+		String pathToCorpus = args[1];
+		DictionaryFileReader dictReader = null;
+		BufferedReader langReader = null;
+		Dictionary dict = null;
+		LanguageModel langModel = null;
 		try {
-			// dict.load(new TabSeparatedReader(pathToDict));
-			dict.load(new ElcombriReader(pathToDict));
+			dictReader = new ElcombriReader(pathToDict);
 		} catch (FileNotFoundException e) {
-			System.err.println("Dictionary not found at given path: " + pathToDict);
-			System.exit(1);
-		} catch (IOException e) {
-			System.err.println("Error while opening file " + pathToDict);
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
 		}
-		System.out.print("DONE\n");
 
-		for (String sentence : GERMAN_SENTENCES) {
-			String englishString = dict.translateSentence(sentence);
-			System.out.println("GERMAN:\t" + sentence);
-			System.out.println("ENGLISH:\t" + englishString);
-			System.out.println();
-		}
-		
-		/** Train the Language Model */
-		BiGramModel languageModel = new BiGramModel();
-	    try {
-			train(languageModel);
-			System.out.println(languageModel.getBiGramProbability("Madam","President"));
+		System.out.println("Loading dictionary...");
+		try {
+			dict = new HashDictionary(dictReader);
 		} catch (IOException e) {
-			System.err.println("Error while opening file " + trainingSentencesFile);
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
+		}
+		System.out.println("DONE!");
+
+		try {
+			langReader = new BufferedReader(new FileReader(pathToCorpus));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		System.out.println("Loading language model...");
+		try {
+			langModel = new BiGramModel(langReader);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("DONE!");
+
+		Translator transe = new Translator(dict, langModel);
+		for (String sentence : GERMAN_SENTENCES) {
+			System.out.println(transe.translateSentence(sentence));
 		}
 	}
 }
