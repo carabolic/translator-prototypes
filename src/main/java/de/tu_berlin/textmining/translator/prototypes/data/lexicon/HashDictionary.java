@@ -1,4 +1,4 @@
-package de.tu_berlin.textmining.translator.prototypes.data;
+package de.tu_berlin.textmining.translator.prototypes.data.lexicon;
 
 import java.io.IOException;
 import java.util.HashSet;

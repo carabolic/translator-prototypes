@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-import de.tu_berlin.textmining.translator.prototypes.data.DictionaryEntry;
-import de.tu_berlin.textmining.translator.prototypes.data.DictionaryEntryBuilder;
+import de.tu_berlin.textmining.translator.prototypes.data.lexicon.DictionaryEntry;
+import de.tu_berlin.textmining.translator.prototypes.data.lexicon.DictionaryEntryBuilder;
 
 public class TabSeparatedReader implements DictionaryFileReader {
 

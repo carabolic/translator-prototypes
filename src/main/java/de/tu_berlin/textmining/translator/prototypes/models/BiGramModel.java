@@ -1,28 +1,22 @@
-package de.tu_berlin.textmining.translator.prototypes;
+package de.tu_berlin.textmining.translator.prototypes.models;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-import edu.stanford.nlp.stats.ClassicCounter;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class BiGramModel implements LanguageModel {
 	
-	public HashMap<String,Integer> words = new HashMap<String,Integer>();
-	public double totalSum = 0;
+	private HashMap<String,Integer> words = new HashMap<String,Integer>();
+	private double totalSum = 0;
 	
 	public void addUniGram(String w) {
 		if(words.get(w)!=null) {
 			words.put(w,words.get(w).intValue()+1);
 		} else {
-			words.put(w,new Integer(1));
+			words.put(w, 1);
 		}
 	}
 	
@@ -72,7 +66,22 @@ public class BiGramModel implements LanguageModel {
 		}
 		
 		double wordProbability = probability / (getCount(w1) + 1.0);
-		Preconditions.checkArgument(wordProbability > 0);
+		assert(wordProbability > 0);
 		return wordProbability;
+	}
+
+	public double getWordProbability(List<String> sentence, int index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public double sentenceLogProbability(List<String> sentence) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public Iterable<String> generateSentence() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

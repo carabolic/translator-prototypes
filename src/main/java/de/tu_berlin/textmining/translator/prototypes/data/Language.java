@@ -1,4 +1,4 @@
-package de.tu_berlin.textmining.translator.prototypes;
+package de.tu_berlin.textmining.translator.prototypes.data;
 
 public enum Language {
 	GERMAN("de"),

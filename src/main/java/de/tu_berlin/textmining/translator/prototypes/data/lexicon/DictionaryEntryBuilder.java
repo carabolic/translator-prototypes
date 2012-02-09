@@ -1,4 +1,4 @@
-package de.tu_berlin.textmining.translator.prototypes.data;
+package de.tu_berlin.textmining.translator.prototypes.data.lexicon;
 
 import java.util.Collection;
 import java.util.HashSet;

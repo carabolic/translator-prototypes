@@ -1,4 +1,4 @@
-package de.tu_berlin.textmining.translator.prototypes;
+package de.tu_berlin.textmining.translator.prototypes.models;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,8 +28,8 @@ public interface  LanguageModel {
 
     /**
      * This function returns the probability of a sentence as scored by the language model
-     *
-     * e.g. P(I am here) = P(I|<s>)*P(am|I)*P(here|am)P(</s>|here)
+     * <br />
+     * e.g.:<br /><code>P(I am here) = P(I|&lt;s&gt;)*P(am|I)*P(here|am)P(&lt;/s&gt;|here)</code>
      *
       * @param sentence
      * @return

@@ -11,8 +11,10 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
-import de.tu_berlin.textmining.translator.prototypes.data.Dictionary;
-import de.tu_berlin.textmining.translator.prototypes.data.HashDictionary;
+import de.tu_berlin.textmining.translator.prototypes.data.lexicon.Dictionary;
+import de.tu_berlin.textmining.translator.prototypes.data.lexicon.HashDictionary;
+import de.tu_berlin.textmining.translator.prototypes.models.BiGramModel;
+import de.tu_berlin.textmining.translator.prototypes.models.LanguageModel;
 import de.tu_berlin.textmining.translator.prototypes.reader.ElcombriReader;
 
 /**

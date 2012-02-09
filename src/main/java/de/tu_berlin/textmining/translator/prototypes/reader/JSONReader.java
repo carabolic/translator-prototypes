@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import de.tu_berlin.textmining.translator.prototypes.data.DictionaryEntry;
+import de.tu_berlin.textmining.translator.prototypes.data.lexicon.DictionaryEntry;
 
 public class JSONReader implements DictionaryFileReader {
 	
