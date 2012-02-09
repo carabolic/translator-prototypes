@@ -3,6 +3,14 @@ package de.tu_berlin.textmining.translator.prototypes;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
+
 import de.tu_berlin.textmining.translator.prototypes.data.Dictionary;
 import de.tu_berlin.textmining.translator.prototypes.data.HashDictionary;
 import de.tu_berlin.textmining.translator.prototypes.reader.ElcombriReader;
@@ -13,6 +21,25 @@ import de.tu_berlin.textmining.translator.prototypes.reader.ElcombriReader;
  */
 public class App {
 
+	static String trainingSentencesFile = "prototypes/corpus.txt";
+	
+	static Collection<List<String>> getSentences(String corpus){
+	    Collection<List<String>> sentences = new ArrayList<List<String>>();
+	    for (String rawSentence : corpus.split("\n")) {
+	        List<String> sentence = Lists.newArrayList();
+	        for (String word : rawSentence.split("\\s+")) {
+	            sentence.add(word.toLowerCase());
+	        }
+	        sentences.add(sentence);
+	    }
+	    return sentences;
+	}
+	
+	static void train(LanguageModel languageModel) throws IOException {
+	    String trainingCorpus = Resources.toString(Resources.getResource(trainingSentencesFile), Charsets.UTF_8);
+	    languageModel.train(getSentences(trainingCorpus));
+	}
+	
 	private static final String[] GERMAN_SENTENCES = {
 			"Über den Wolken, schwingen die Vögel ihre Flügel.",
 			"Zehn zahme Ziegen zogen zehn Zentner Zucker im Zwickauer Zoo",
@@ -61,6 +88,17 @@ public class App {
 			System.out.println("GERMAN:\t" + sentence);
 			System.out.println("ENGLISH:\t" + englishString);
 			System.out.println();
+		}
+		
+		/** Train the Language Model */
+		BiGramModel languageModel = new BiGramModel();
+	    try {
+			train(languageModel);
+			System.out.println(languageModel.getBiGramProbability("Madam","President"));
+		} catch (IOException e) {
+			System.err.println("Error while opening file " + trainingSentencesFile);
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 }
