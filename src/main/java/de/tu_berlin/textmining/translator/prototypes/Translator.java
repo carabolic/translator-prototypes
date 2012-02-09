@@ -49,22 +49,20 @@ public class Translator {
 
 		for (List<String> possibilities : translation) {
 			double maxProb = 0.0;
-			boolean allEqual = true;
+			int posNum = 0;
 			candidate = "";
 			for (String currentWord : possibilities) {
 				double prob = this.langModel.getBiGramProbability(lastWord, currentWord);
 				if (prob > maxProb) {
 					maxProb = prob;
-					if (!candidate.equals("")) {
-						allEqual = false;
-					}
 					candidate = currentWord;
+					posNum++;
 				}
 			}
 			
-			if (allEqual) {
+			if (posNum == 1 && possibilities.size() > 1) {
+				maxProb = 0.0;
 				for (String currentWord : possibilities) {
-					maxProb = 0.0;
 					double prob = this.langModel.getUniGramProbability(currentWord);
 					if (prob > maxProb) {
 						maxProb = prob;
@@ -125,8 +123,9 @@ public class Translator {
 		System.out.println("DONE!");
 
 		Translator transe = new Translator(dict, langModel);
-		for (String sentence : GERMAN_SENTENCES) {
+		System.out.println(transe.translateSentence("zehn ziege"));
+		/*for (String sentence : GERMAN_SENTENCES) {
 			System.out.println(transe.translateSentence(sentence));
-		}
+		}*/
 	}
 }
