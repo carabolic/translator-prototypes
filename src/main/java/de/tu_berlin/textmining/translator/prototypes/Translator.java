@@ -76,7 +76,7 @@ public class Translator {
 			strBld.append(" ");
 		}
 
-		return strBld.toString().trim() + "";
+		return strBld.toString().trim() + String.valueOf(sentence.charAt(sentence.length()-1)).replaceAll("[a-zA-Z0-9äöüßÄÖÜ\\-]", "");
 	}
 
 	public static void main(String... args) throws UnsupportedEncodingException {
