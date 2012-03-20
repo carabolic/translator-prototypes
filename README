@@ -1,11 +1,3 @@
-This library requires mate-tools to be installed.
-Please go to http://code.google.com/p/mate-tools/downloads/list and download anna-2.jar.
-Now you need to create a maven artifact including the anna-2.jar.
-Just go to the folder where anna-2.jar is included and type:
-mvn install:install-file -Dfile=anna-2.jar \
--DgroupId=uni-stuttgart.de \
--DartifactId=mate-tools \ 
--Dversion=2.0.0 \
--Dpackaging=jar \
--DgeneratePom=true \
--DcreateChecksum=true
+Require Libraries:
+berkeleylm 1.0.0 (http://code.google.com/p/berkeleylm/)
+Install it via Maven
