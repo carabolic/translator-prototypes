@@ -24,20 +24,24 @@ public class Trie {
 	public int getMaxDegree() {
 		return this.maxDegree;
 	}
-	
+
 	public void insert(final String word) {
 		List<String> sentence = Lists.newArrayList();
-		sentence.add(word);
+		if (!word.isEmpty()) {
+			sentence.add(word);
+		}
 		this.insert(sentence);
 	}
 
 	public void insert(List<String> sentence) {
 		this.root.insert(sentence);
 	}
-	
+
 	public long retrieve(String word) {
 		List<String> sentence = Lists.newArrayList();
-		sentence.add(word);
+		if (!word.isEmpty()) {
+			sentence.add(word);
+		}
 		return this.retrieve(sentence);
 	}
 
@@ -95,8 +99,10 @@ public class Trie {
 				} else {
 					return 0l;
 				}
+			} else {
+				count = this.count;
 			}
-			
+
 			return count;
 		}
 
@@ -116,10 +122,15 @@ public class Trie {
 				return Lists.newArrayList();
 			}
 		}
+		
+		@Override
+		public String toString() {
+			return this.count + "";
+		}
 	}
-	
+
 	public static void main(String... args) {
-		Trie t = new Trie();
+		Trie t = new Trie(3);
 		List<String> s1 = Lists.newArrayList();
 		s1.add("Hallo");
 		s1.add("Welt");
@@ -145,5 +156,7 @@ public class Trie {
 		sTest.add("Hallo");
 		sTest.add("du");
 		System.out.println(sTest + " count: " + t.retrieve(sTest));
+		System.out.println(t.root.count);
+		System.out.println(t.retrieve(""));
 	}
 }
