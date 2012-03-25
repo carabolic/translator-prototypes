@@ -32,6 +32,14 @@ public class Trie {
 		}
 		this.insert(sentence);
 	}
+	
+	public void insert(final String... words) {
+		List<String> sentence = Lists.newArrayList();
+		for (String word : words) {
+			sentence.add(word);
+		}
+		this.insert(sentence);
+	}
 
 	public void insert(List<String> sentence) {
 		this.root.insert(sentence);

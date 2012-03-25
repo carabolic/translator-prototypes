@@ -43,6 +43,10 @@ public class NGramLanguageModel {
 		}
 	}
 	
+	public void train(final List<String> sentence) {
+		List<String> stoppedSentence = this.annotateSentence(sentence);
+	}
+	
 	public double getWordLogProbability(List<String> sentence, int index) {
 		Preconditions.checkArgument(sentence.size() > index, "The specified index is too large: " + index);
 		// the length of the history specified for this instance
@@ -94,6 +98,17 @@ public class NGramLanguageModel {
 		strBld.append(NGramLanguageModel.SENTENCE_END);
 		
 		return strBld.toString();
+	}
+	
+	private List<String> annotateSentence(final List<String> sentence) {
+		List<String> stoppedSentence = Lists.newArrayList();
+		for (int i = 0; i < this.maxDegree - 1; i++) {
+			stoppedSentence.add(SENTENCE_START);
+		}
+		stoppedSentence.addAll(sentence);
+		stoppedSentence.add(SENTENCE_END);
+		
+		return stoppedSentence;
 	}
 	
 	public static void main(String... args) throws IOException {
